@@ -32,22 +32,22 @@ try:
 except OperationalError as e:
     print("Connection Error: ", e)
 
+
+def create_table(sql_querry):
+    try:
+        cursor.execute(sql_querry)
+        print("Table users created")
+    except DuplicateTable as e:
+        print("Table exists: ", e)
+
 try:
     cnx = connect(database="workshop", user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
     cnx.autocommit = True
     cursor = cnx.cursor()
 
-    try:
-        cursor.execute(CREATE_USERS_TABLE)
-        print("Table users created")
-    except DuplicateTable as e:
-        print("Table exists: ", e)
+    create_table(CREATE_USERS_TABLE)
+    create_table(CREATE_MESSAGES_TABLE)
 
-    try:
-        cursor.execute(CREATE_MESSAGES_TABLE)
-        print("Table messages created")
-    except DuplicateTable as e:
-        print("Table exists: ", e)
     cnx.close()
 except OperationalError as e:
     print("Connection Error: ", e)
