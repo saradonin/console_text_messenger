@@ -19,26 +19,33 @@ CREATE_MESSAGES_TABLE = """CREATE TABLE messages (
     text varchar(255),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
 
+
+def create_table(sql_query):
+    try:
+        cursor.execute(sql_query)
+        print("Table created")
+    except DuplicateTable as e:
+        print("Table exists: ", e)
+
+
+def create_database(sql_query):
+    try:
+        cursor.execute(sql_query)
+        print("Database created")
+    except DuplicateDatabase as e:
+        print("Database exists: ", e)
+
+
 try:
     cnx = connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
     cnx.autocommit = True
     cursor = cnx.cursor()
-    try:
-        cursor.execute(CREATE_DB)
-        print("Database created")
-    except DuplicateDatabase as e:
-        print("Database exists: ", e)
+
+    create_database(CREATE_DB)
+
     cnx.close()
 except OperationalError as e:
     print("Connection Error: ", e)
-
-
-def create_table(sql_querry):
-    try:
-        cursor.execute(sql_querry)
-        print("Table users created")
-    except DuplicateTable as e:
-        print("Table exists: ", e)
 
 try:
     cnx = connect(database="workshop", user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
