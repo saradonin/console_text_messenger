@@ -20,20 +20,21 @@ CREATE_MESSAGES_TABLE = """CREATE TABLE messages (
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
 
 
-def create_table(sql_query):
+def execute_sql(sql_query):
+    if 'CREATE DATABASE' in sql_query:
+        msg = 'Database created.'
+    elif 'CREATE TABLE' in sql_query:
+        msg = 'Table created'
+    else:
+        msg = 'SQL query executed'
+
     try:
         cursor.execute(sql_query)
-        print("Table created")
-    except DuplicateTable as e:
-        print("Table exists: ", e)
-
-
-def create_database(sql_query):
-    try:
-        cursor.execute(sql_query)
-        print("Database created")
+        print(msg)
     except DuplicateDatabase as e:
         print("Database exists: ", e)
+    except DuplicateTable as e:
+        print("Table exists: ", e)
 
 
 try:
@@ -41,7 +42,7 @@ try:
     cnx.autocommit = True
     cursor = cnx.cursor()
 
-    create_database(CREATE_DB)
+    execute_sql(CREATE_DB)
 
     cnx.close()
 except OperationalError as e:
@@ -52,8 +53,8 @@ try:
     cnx.autocommit = True
     cursor = cnx.cursor()
 
-    create_table(CREATE_USERS_TABLE)
-    create_table(CREATE_MESSAGES_TABLE)
+    execute_sql(CREATE_USERS_TABLE)
+    execute_sql(CREATE_MESSAGES_TABLE)
 
     cnx.close()
 except OperationalError as e:
