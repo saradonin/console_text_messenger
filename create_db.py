@@ -21,6 +21,14 @@ CREATE_MESSAGES_TABLE = """CREATE TABLE messages (
 
 
 def execute_sql(sql_query):
+    """
+    Execute an SQL query and handle exceptions for duplicate database or table.
+
+    :param sql_query: The SQL query to execute.
+    :type sql_query: str
+    :return: None
+    :rtype: None
+    """
     if 'CREATE DATABASE' in sql_query:
         msg = 'Database created.'
     elif 'CREATE TABLE' in sql_query:
