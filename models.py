@@ -63,3 +63,8 @@ class User:
             users.append(loaded_user)
         return users
 
+    def delete(self, cursor):
+        sql = "DELETE FROM Users WHERE id=%s"
+        cursor.execute(sql, (self.id,))
+        self._id = -1
+        return True
