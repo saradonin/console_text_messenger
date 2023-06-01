@@ -77,3 +77,12 @@ class Message:
         self.to_id = to_id
         self.text = text
         self._creation_date = None
+
+    @property
+    def creation_date(self):
+        return self._creation_date
+
+    @property
+    def id(self):
+        return self._id
+
