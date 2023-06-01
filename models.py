@@ -25,17 +25,22 @@ class User:
     def save_to_db(self, cursor):
         if self._id == -1:
             sql = """INSERT INTO users(username, hashed_password)
-                    VALUES (%s, %s) RETURNING id"""
-            values = (self.username, self._hashed_password)
+                            VALUES(%s, %s) RETURNING id"""
+            values = (self.username, self.hashed_password)
             cursor.execute(sql, values)
-            self._id = cursor.fetchone()[0]
+            self._id = cursor.fetchone()[0]  # or cursor.fetchone()['id']
             return True
-        return False
+        else:
+            sql = """UPDATE Users SET username=%s, hashed_password=%s
+                           WHERE id=%s"""
+            values = (self.username, self.hashed_password, self.id)
+            cursor.execute(sql, values)
+            return True
 
     @staticmethod
     def load_user_by_id(cursor, id_):
         sql = "SELECT id, username, hashed_password FROM users WHERE id=%s"
-        cursor.execute(sql, (id_,))  # (id_, ) - cause we need a tuple
+        cursor.execute(sql, (id_,))  # it has to be tuple
         data = cursor.fetchone()
         if data:
             id_, username, hashed_password = data
