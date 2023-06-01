@@ -68,3 +68,12 @@ class User:
         cursor.execute(sql, (self.id,))
         self._id = -1
         return True
+
+
+class Message:
+    def __init__(self, from_id, to_id, text):
+        self._id = -1
+        self.from_id = from_id
+        self.to_id = to_id
+        self.text = text
+        self._creation_date = None
