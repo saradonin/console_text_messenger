@@ -40,7 +40,7 @@ class User:
     @staticmethod
     def load_user_by_id(cursor, id_):
         sql = "SELECT id, username, hashed_password FROM users WHERE id=%s"
-        cursor.execute(sql, (id_,))  # it has to be tuple
+        cursor.execute(sql, (id_,))  # (id_, ) - cause we need a tuple
         data = cursor.fetchone()
         if data:
             id_, username, hashed_password = data
@@ -48,5 +48,18 @@ class User:
             loaded_user._id = id_
             loaded_user._hashed_password = hashed_password
             return loaded_user
-        else:
-            return None
+
+    @staticmethod
+    def load_all_users(cursor):
+        sql = "SELECT id, username, hashed_password FROM Users"
+        users = []
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+            id_, username, hashed_password = row
+            loaded_user = User()
+            loaded_user._id = id_
+            loaded_user.username = username
+            loaded_user._hashed_password = hashed_password
+            users.append(loaded_user)
+        return users
+
