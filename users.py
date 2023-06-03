@@ -18,7 +18,30 @@ parser.add_argument("-e", "--edit", help="edit user", action="store_true")
 args = parser.parse_args()
 
 
+def edit_user(cur, username, password, new_pass):
+    user = User.load_user_by_username(cur, username)
+    if not user:
+        print("User does not exist!")
+    elif check_password(password, user.hashed_password):
+        if len(new_pass) < 8:
+            print("Password is tho short. It should have minimum 8 characters.")
+        else:
+            user.hashed_password = new_pass
+            user.save_to_db(cur)
+            print("Password changed.")
+    else:
+        print("Incorrect password")
 
+
+def delete_user(cur, username, password):
+    user = User.load_user_by_username(cur, username)
+    if not user:
+        print("User does not exist!")
+    elif check_password(password, user.hashed_password):
+        user.delete(cur)
+        print("User deleted.")
+    else:
+        print("Incorrect password!")
 
 
 def create_user(cur, username, password):
@@ -37,5 +60,4 @@ def list_users(cur):
     users = User.load_all_users(cur)
     for user in users:
         print(user.username)
-
 
