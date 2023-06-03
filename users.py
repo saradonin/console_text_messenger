@@ -33,3 +33,9 @@ def create_user(cur, username, password):
             print("User already exists. ", e)
 
 
+def list_users(cur):
+    users = User.load_all_users(cur)
+    for user in users:
+        print(user.username)
+
+
