@@ -18,3 +18,18 @@ parser.add_argument("-e", "--edit", help="edit user", action="store_true")
 args = parser.parse_args()
 
 
+
+
+
+def create_user(cur, username, password):
+    if len(password) < 8:
+        print("Password is tho short. It should have minimum 8 characters.")
+    else:
+        try:
+            user = User(username=username, password=password)
+            user.save_to_db(cur)
+            print("User created")
+        except UniqueViolation as e:
+            print("User already exists. ", e)
+
+
